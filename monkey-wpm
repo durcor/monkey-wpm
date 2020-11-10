@@ -12,6 +12,7 @@ fi
 # word_size=8
 
 [ -f /usr/share/dict/cracklib-small ] || {
+    sudo mkdir -p /usr/share/dict
     echo "Installing cracklib"
     sudo curl https://github.com/cracklib/cracklib/raw/master/src/dicts/cracklib-small -o /usr/share/dict/cracklib-small
 }

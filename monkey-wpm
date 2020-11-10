@@ -1,0 +1,34 @@
+#!/bin/sh
+
+# Amount of words to send to wpm.
+if [ ! "$1" ]; then
+    word_amount=20
+else
+    word_amount=$1
+fi
+
+# TODO
+#   Add support for limiting word length by specified amount
+# word_size=8
+
+[ -f /usr/share/dict/cracklib-small ] || {
+    echo "Installing cracklib"
+    sudo curl https://github.com/cracklib/cracklib/raw/master/src/dicts/cracklib-small -o /usr/share/dict/cracklib-small
+}
+
+shuf /usr/share/dict/cracklib-small | head -$word_amount |
+    tr '\n' ' ' > /tmp/monkey-wpm
+
+command -v wpm > /dev/null || {
+    echo "Installing wpm"
+    if command -v yay > /dev/null; then
+        yay -S python-wpm
+    elif command -v pip > /dev/null; then
+        sudo pip install wpm
+    else
+        echo "No way to install wpm found."
+        exit 1
+    fi
+}
+
+wpm --load /tmp/monkey-wpm

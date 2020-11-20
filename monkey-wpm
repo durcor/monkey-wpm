@@ -9,7 +9,11 @@ fi
 
 # TODO
 #   Add support for limiting word length by specified amount
-# word_size=8
+# if [ ! "$2" ]; then
+# 	word_size=8
+# else
+# 	word_size=$2
+# fi
 
 [ -f /usr/share/dict/cracklib-small ] || {
     sudo mkdir -p /usr/share/dict
@@ -17,7 +21,7 @@ fi
     sudo curl https://github.com/cracklib/cracklib/raw/master/src/dicts/cracklib-small -o /usr/share/dict/cracklib-small
 }
 
-shuf /usr/share/dict/cracklib-small | head -$word_amount |
+grep -v '[0-9]' /usr/share/dict/cracklib-small | shuf | head -"$word_amount" |
     tr '\n' ' ' > /tmp/monkey-wpm
 
 command -v wpm > /dev/null || {
